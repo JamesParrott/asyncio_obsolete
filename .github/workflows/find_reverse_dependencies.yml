@@ -1,1 +1,22 @@
+name: Find reverse dependencies
 
+on:
+  workflow_dispatch:
+
+jobs:
+  rev_deps:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "3.13"
+    - run:
+        pip install rev-deps
+    - run:
+        rev-deps asyncio >> asyncio_reverse_deps.txt
+
+    - name: Upload txt file of found reverse deps
+      uses: actions/upload-artifact@v4
+      with:
+        name: asyncio_reverse_deps
+        path: ./asyncio_reverse_deps.txt
