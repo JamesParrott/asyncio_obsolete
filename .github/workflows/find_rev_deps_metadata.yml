@@ -1,1 +1,24 @@
 
+name: Find reverse dependencies metadata from PyPi JSON API
+
+on:
+  workflow_dispatch:
+
+jobs:
+  rev_deps:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "3.13"
+    - run:
+        pip install requests
+    - run:
+        python get_rev_deps_metadata.py
+
+    - name: Upload txt file of found reverse deps
+      uses: actions/upload-artifact@v4
+      with:
+        name: asyncio_rev_deps_metadata
+        path: ./asyncio_rev_deps_metadata.json
