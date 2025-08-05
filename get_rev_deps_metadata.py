@@ -22,7 +22,8 @@ def main() -> dict:
 
         response = requests.get(url)
 
-        response.raise_for_status()
+        # Some libraries like pytestmsfabric from wheelodex aren't on PyPi, so don't:
+        # response.raise_for_status()
 
         # meta_data = response.json()['data']['dist_info']['metadata']
         meta_data[project_name] = response.json()
