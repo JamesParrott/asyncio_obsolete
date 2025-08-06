@@ -1,0 +1,75 @@
+
+name: Run Pytest on reverse-dependencies with old asyncio version
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  run_pytest:
+
+    strategy:
+      fail-fast: false
+      matrix:
+        rev-dep: 
+          - {package_name: agentuity, deps: '"aiohttp-sse>=2.2.0" "aiohttp>=3.11.13" "httpx>=0.28.1" "mail-parser>=4.1.2" "openai-agents>=0.0.3" "openlit>=1.33.19" "opentelemetry-api>=1.31.1" "opentelemetry-exporter-otlp-proto-http>=1.31.1" "opentelemetry-exporter-otlp>=1.31.1" "opentelemetry-instrumentation-httpx>=0.48b0" "opentelemetry-instrumentation>=0.48b0" "opentelemetry-sdk>=1.31.1" "pyyaml>=6.0.2" "wrapt>=1.17.2" "pytest-asyncio>=0.23.0" "pytest-mock>=3.11.1" "pytest>=7.4.0" "ruff>=0.1.0"',}
+          - {package_name: aiomoqt, deps: '"aioquic>=1.2.0" "pytest" "argparse"',}
+          - {package_name: aiosimon-io, deps: '"aiohttp<4.0,>=3.10" "pydantic<3.0,>=2.10" "build<2.0,>=1.2" "twine<7.0,>=6.1" "black<25.0,>=24.8" "flake8<8.0,>=7.1" "isort<6.0,>=5.13" "mypy<2.0,>=1.14" "validate-pyproject<1.0,>=0.24" "sphinx-autodoc-typehints<3.0,>=2.0" "sphinx-rtd-theme<4.0,>=3.0" "sphinx<8.0,>=7.1" "aioresponses<1.0,>=0.7" "pytest-asyncio<1.0,>=0.24" "pytest-cov<6.0,>=5.0" "pytest-mock<4.0,>=3.14" "pytest<9.0,>=8.3"',}
+          - {package_name: batch-executor, deps: '"click" "tqdm" "func_timeout" "psutil" "colorama" "coverage" "pytest" "pytest-asyncio" "pytest-cov" "pytest-mock" "pytest-xdist" "pytest-pythonpath"',}
+          - {package_name: chuk-llm, deps: '"anthropic>=0.51.0" "chuk-ai-session-manager>=0.7" "google-genai>=1.15.0" "groq>=0.25.0" "httpx>=0.28.1" "ibm-watsonx-ai>=1.3.30" "jinja2>=3.1.6" "mistralai>=1.7.1" "ollama>=0.4.8" "openai>=1.79.0" "python-dotenv>=1.1.0" "pyyaml>=6.0.2" "tiktoken>=0.9.0" "transformers>=4.53.2" "chuk-ai-session-manager[redis]>=0.7" "ibm-watsonx-ai" "jinja2>=3.1.6" "transformers>=4.53.2" "rich>=14.0.0" "pytest-asyncio>=0.26.0" "pytest>=8.3.5" "pytest-cov>=6.1.1" "rich>=14.0.0" "chuk-ai-session-manager[redis]>=0.7" "rich>=14.0.0"',}
+          - {package_name: emmi, deps: '"schema" "pyvisa" "pyvisa-py" "numpy" "xarray" "pyyaml" "cachetools" "pytest" "pytest-cov" "pyvisa-sim" "pytest-asyncio" "parse" "zeroconf" "psutil" "softioc" "caproto" "opentelemetry-api" "opentelemetry-exporter-otlp" "emmi[caproto,otel,scpi,test]"',}
+          - {package_name: graph-context, deps: '"cachetools>=5.3.2" "pydantic>=2.5.2" "typing-extensions>=4.8.0" "hypothesis>=6.87.1" "pre-commit>=3.5.0" "pytest-asyncio>=0.21.1" "pytest-cov>=4.1.0" "pytest>=7.4.3" "ruff>=0.1.6"',}
+          - {package_name: hipcheck-sdk, deps: '"coverage>=7.6.12" "datamodel-code-generator>=0.28.5" "grpcio-tools>=1.70.0" "grpcio>=1.70.0" "logging>=0.4.9.6" "pydantic>=2.10.6" "pytest-asyncio>=0.26.0" "pytest>=8.3.5" "sphinx>=8.1.3" "wheel>=0.45.1"',}
+          - {package_name: LiveChessCloud, deps: '"colorama==0.4.4" "click==8.0.1" "requests==2.32.2" "chess==1.6.1" "pytest==6.2.4" "aiohttp==3.10.11"',}
+          - {package_name: llama-metasearch, deps: '"httpx>=0.24.0" "llamafind>=0.1.0" "loguru>=0.7.0" "numpy>=1.21.0" "pydantic>=1.10.0" "scikit-learn>=1.1.0" "black>=23.3.0" "fastapi>=0.95.0" "httpx" "isort>=5.12.0" "mkdocs-material>=9.1.6" "mkdocs>=1.4.2" "mkdocstrings[python]>=0.20.0" "mypy>=1.2.0" "pre-commit>=3.3.1" "pytest-asyncio" "pytest-cov>=4.1.0" "pytest-mock>=3.10.0" "pytest>=7.3.1" "ruff>=0.0.260" "uvicorn[standard]>=0.21.0" "fastapi>=0.95.0" "uvicorn[standard]>=0.21.0" "black>=23.3.0" "httpx" "isort>=5.12.0" "mypy>=1.2.0" "pre-commit>=3.3.1" "pytest-asyncio" "pytest-cov>=4.1.0" "pytest-mock>=3.10.0" "pytest>=7.3.1" "ruff>=0.0.260" "mkdocs-material>=9.1.6" "mkdocs>=1.4.2" "mkdocstrings[python]>=0.20.0"',}
+          - {package_name: local-flight-map, deps: '"aiohttp==3.12.2" "async-lru==2.0.5" "fastapi==0.115.12" "folium==0.19.6" "itsdangerous==2.2.0" "nest-asyncio==1.6.0" "orjson==3.10.18" "pydantic==2.11.4" "pydantic-settings==2.9.1" "uvicorn==0.34.2" "pytest==8.0.0" "pytest-asyncio==0.23.5"',}
+          - {package_name: logos-shift-client, deps: '"requests" "tenacity" "httpx" "pytest" "ruff" "bump2version"',}
+          - {package_name: lumeo, deps: '"httpx>=0.27" "backoff>=2.2" "aiocache>=0.12" "aiofiles>=23.2" "anyio>=4.3" "requests>=2.31" "pyyaml<7.0,>=6.0" "boto3>=1.34" "rich<14.0.0,>=13.8.0" "argparse>=1.4" "colorlog>=6.8" "packaging>=24.0" "importlib-metadata" "httpx>=0.27" "backoff>=2.2" "aiocache>=0.12" "aiofiles>=23.2" "anyio>=4.3" "requests>=2.31" "pyyaml<7.0,>=6.0" "importlib-metadata" "boto3>=1.34" "rich<14.0.0,>=13.8.0" "argparse>=1.4" "colorlog>=6.8" "packaging>=24.0" "httpx>=0.27" "backoff>=2.2" "aiocache>=0.12" "aiofiles>=23.2" "anyio>=4.3" "requests>=2.31" "pyyaml<7.0,>=6.0" "importlib-metadata" "setuptools" "pytest" "pytest-cov"',}
+          - {package_name: mcp-agent-x, deps: '"langchain-google-genai>=2.1.2" "langchain-openai>=0.1.20" "mcp-use>=1.1.5" "python-dotenv>=1.1.0" "rich>=13.5.0" "prompt_toolkit>=3.0.38" "platformdirs>=4.2.0" "click>=8.1.7" "pre-commit>=4.2.0" "pytest>=7.4.0" "pytest-asyncio>=0.23.0" "ruff>=0.2.0"',}
+          - {package_name: mcp-text-editor, deps: '"chardet>=5.2.0" "mcp>=1.1.2" "black>=23.3.0" "isort>=5.12.0" "mypy>=1.2.0" "pre-commit>=3.2.2" "ruff>=0.0.262" "pytest-asyncio>=0.24.0" "pytest-cov>=6.0.0" "pytest-env>=1.1.0" "pytest-mock>=3.12.0" "pytest>=8.3.4"',}
+          - {package_name: ninjakiwi-api, deps: '"aiohttp" "black" "flake8" "flake8-docstrings" "isort" "livereload" "pip" "pre-commit" "pyreadline" "pytest" "pytest-asyncio" "pytest-cov" "pytest-mock" "toml" "tornado" "tox" "twine" "virtualenv"',}
+          - {package_name: orange-mcp-llm-bridge, deps: '"mcp>=1.0.0" "openai>=1.0.0" "python-dotenv>=0.19.0" "pydantic>=2.0.0" "aiohttp>=3.8.0" "typing-extensions>=4.0.0" "colorlog>=6.9.0" "pytest>=7.0.0" "pytest-asyncio>=0.21.0" "pytest-mock>=3.10.0" "pytest-aiohttp>=1.0.4"',}
+          - {package_name: ostium-python-sdk, deps: '"web3>=6.0.0" "gql==3.5.0" "graphql-core==3.2.5" "pytest" "pytest-cov" "pytest-asyncio" "humanize" "aiohttp>=3.8.0" "requests>=2.28.0" "python-dotenv>=0.19.0" "pydantic>=2.0.0" "pytest" "pytest-cov" "pytest-asyncio"',}
+          - {package_name: pic-prompt, deps: '"aiohttp>=3.8.0" "boto3>=1.26.0" "litellm>=1.64.1" "pillow>=10.4.0" "pytest-env>=1.1.5" "requests>=2.28.0" "pytest-asyncio>=0.20.0" "pytest-cov>=4.0.0" "pytest-mock>=3.14.0" "pytest>=7.0"',}
+          - {package_name: piedpiper-engine, deps: '"iniconfig==2.0.0" "packaging==24.2" "pluggy==1.5.0" "pytest==8.3.4"',}
+          - {package_name: py-http-auto-test, deps: '"pytest~=7.4" "pycurl~=7.45.2" "brotli==1.0.9" "certifi~=2023.7.22" "websockets~=13.1.0" "pyyaml" "jinja2~=3.1.2" "click~=8.1.7" "setuptools~=68.0.0"',}
+          - {package_name: response-bandwidth-limiter, deps: '"pytest>=6.0.0" "httpx>=0.20.0" "fastapi>=0.68.0" "starlette>=0.14.0"',}
+          - {package_name: revup, deps: '"aiohttp" "async_lru" "attrs" "requests" "rich" "multidict" "yarl" "async_timeout" "charset_normalizer" "aiosignal" "black==24.1.1" "isort" "pylint==3.2.7" "mypy==1.13.0" "build" "twine" "pytest" "pytest-mock"',}
+          - {package_name: smart-agent, deps: '"colorama" "openai" "click" "python-dotenv" "pyyaml>=6.0" "uv" "openai-agents[litellm]==0.0.17" "rich" "fastmcp>=2.6.1" "mcp[cli]>=1.6" "backoff>=2.2.1" "anyio>=3.7.0" "httpcore>=1.0.9" "chainlit" "langfuse>=2.0.0" "pytest>=7.0.0" "pytest-cov>=4.0.0" "pytest-asyncio>=0.21.0" "black>=23.0.0" "flake8>=6.0.0" "mypy>=1.0.0"',}
+          - {package_name: stone-connect, deps: '"aiohttp>=3.8.0" "mypy>=1.0.0" "pytest-asyncio>=0.21.0" "pytest-cov>=4.0.0" "pytest>=7.0.0" "ruff>=0.1.0"',}
+          - {package_name: superstream-beta, deps: '"pydantic>=2.6.3" "nats-py>=2.7.2" "protobuf>=4.25.3" "confluent-kafka>=2.3.0" "requests>=2.31.0" "jsonschema>=4.21.1" "nest-asyncio>=1.6.0" "pytest>=8.0.2" "pytest-mock>=3.12.0"',}
+          - {package_name: superstream-py-beta, deps: '"pydantic>=2.6.3" "nats-py>=2.7.2" "protobuf>=4.25.3" "confluent-kafka>=2.3.0" "requests>=2.31.0" "jsonschema>=4.21.1" "nest-asyncio>=1.6.0" "pytest>=8.0.2" "pytest-mock>=3.12.0"',}
+          - {package_name: superstream-py, deps: '"pydantic>=2.6.3" "nats-py>=2.7.2" "protobuf>=4.25.3" "confluent-kafka>=2.3.0" "requests>=2.31.0" "jsonschema>=4.21.1" "nest-asyncio>=1.6.0" "pytest>=8.0.2" "pytest-mock>=3.12.0"',}
+          - {package_name: test-impact-analyzer, deps: '"flask>=3.0.0" "pydantic>=2.0.0" "pydantic-settings>=2.0.0" "requests>=2.31.0" "python-dotenv>=1.0.0" "gitpython>=3.1.0" "pytest>=8.0.0" "pytest-cov>=4.1.0" "astroid>=3.0.0" "aiohttp>=3.9.0" "typing-extensions>=4.9.0" "colorlog>=6.8.0" "openai>=1.0.0" "langchain>=0.1.0" "langchain-ollama>=0.1.0" "crewai>=0.1.0"',}
+          - {package_name: yandex-query-magic, deps: '"aiohttp-retry>=2.8.3" "aiohttp>=3.9.1" "cryptography>=3.4.8" "ipywidgets>=8.1.1" "jupyter-contrib-nbextensions>=0.7.0" "jupyter-ui-poll>=0.2.2" "nest-asyncio>=1.6.0" "pandas>=2.2.0" "pyjwt>=2.3.0" "python-dateutil>=2.8.2" "requests>=2.31.0" "typing>=3.7.4.3" "urllib3>=1.26.5" "jinja2" "pytest-asyncio>=0.23.4" "pytest-httpserver>=1.0.8" "pytest>=7.4.4" "werkzeug>=3.0.1"',}
+
+
+    name: Test ${{ matrix.rev-dep.package_name }}
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "3.13"
+
+    - name: Download sdist
+      run: 'pip download --no-binary=:all: --no-deps --dest . ${{ matrix.rev-dep.package_name }}'
+      
+    - name: Extract sdist
+      run: tar -xzf *.tar.gz --strip-components=1 -C .
+
+
+    - name: Install asyncio as specified (or v3.4.3)
+      run: pip install ${{ matrix.rev-dep.asyncio_dependency_specifier }}
+
+    - name: Install other deps
+      run: pip install ${{ matrix.rev-dep.deps }}
+
+    - name: Install ${{ matrix.rev-dep.package_name }} from pypi
+      run: pip install ${{ matrix.rev-dep.package_name }}
+
+    - name: Run pytest
+      working-directory: .
+      timeout-minutes: 1
+      run: pytest
