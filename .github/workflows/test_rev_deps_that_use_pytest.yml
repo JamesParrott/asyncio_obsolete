@@ -1,0 +1,48 @@
+
+name: Find reverse dependencies metadata from PyPi JSON API
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run_pytest:
+
+    strategy:
+      fail-fast: false
+      matrix:
+        rev-dep: 
+          - {package_name: yfinhanced, asyncio_dependency_specifier: 'asyncio', deps: '"pandas" "aiohttp" "pytz" "requests" "pytest" "pyteset-asyncio"',}
+          - {package_name: youtube-transcript-generator, asyncio_dependency_specifier: 'asyncio>=3.4.3', deps: '"google-generativeai>=0.3.0" "yt-dlp>=2024.1.1" "pydantic>=2.6.0" "pydantic-settings>=2.1.0" "typer[all]>=0.9.0" "rich>=13.7.0" "loguru>=0.7.2" "aiohttp>=3.9.1" "python-dotenv>=1.0.0" "pytest>=8.0.0" "pytest-asyncio>=0.23.5" "pytest-cov>=4.1.0" "black>=24.1.0" "isort>=5.13.2" "mypy>=1.8.0" "pylint>=3.0.3" "pre-commit>=3.6.0" "ipython>=8.12.0" "pytest-watch>=4.2.0"',}
+          - {package_name: zaku, asyncio_dependency_specifier: 'asyncio', deps: '"params-proto>=2.11.16" "pillow" "msgpack" "numpy>=1.21" "websockets" "aiohttp" "aiohttp-cors" "killport" "redis" "restructuredtext-lint" "twine" "aiohttp" "aiohttp-cors" "black==22.3.0" "killport" "redis" "pylint==2.13.4" "pytest==7.1.2" "sphinx==7.1.2" "pytest-asyncio" "pytest-dependency" "furo" "sphinx-copybutton" "myst-parser" "trimesh" "tqdm" "aiohttp" "aiohttp-cors" "cmx" "functional-notations" "killport" "ml-logger" "opencv-python" "open3d<0.16.0,>=0.15.0" "redis" "trimesh"',}
+          - {package_name: zen-engine, asyncio_dependency_specifier: 'asyncio', deps: '"black" "bumpver" "isort" "pip-tools" "pytest"',}
+          - {package_name: zktls-py-sdk, asyncio_dependency_specifier: 'asyncio>=3.4.3', deps: '"aiohttp>=3.8.0" "eth-account>=0.8.0" "eth-typing>=3.0.0" "pydantic>=2.0.0" "web3>=6.0.0" "black>=22.0.0" "flake8>=4.0.0" "isort>=5.10.0" "mypy>=0.900" "pylint>=2.12.0" "myst-parser>=0.18.0" "sphinx-rtd-theme>=1.0.0" "sphinx>=4.0.0" "pytest-asyncio>=0.18.0" "pytest-cov>=3.0.0" "pytest-mock>=3.6.0" "pytest>=7.0.0"',}        
+
+    name: Test ${{ matrix.rev-dep.package_name }}
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "3.13"
+
+    - name: Download sdist
+      run: uv pip download --no-binary=:all: --no-deps --dest . ${{ matrix.rev-dep.package_name }}
+      
+    - name: Extract sdist
+      run:
+        tar -xzf ./${{ matrix.rev-dep.package_name }}*.tar.gz
+
+    - name: Install asyncio as specified (or v3.4.3)
+      run: pip install ${{ matrix.rev-dep.asyncio_dependency_specifier }}
+
+    - name: Install other deps
+      run: pip install ${{ matrix.rev-dep.deps }}
+
+    - name: Install ${{ matrix.rev-deps.package_name }} from pypi
+      run: pip install matrix.rev-deps.package_name 
+
+    - name: Run pytest
+      timeout-minutes: 1
+      working-directory: ./${{ matrix.rev-dep.package_name }}
+      run: pytest
