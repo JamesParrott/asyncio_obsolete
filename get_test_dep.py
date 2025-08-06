@@ -30,7 +30,6 @@ for k, v in d.items():
         #     extras.add(m.group('extra_name').strip())
 
     print('          - {' f'package_name: {k}, ', end='')
-    print(f"asyncio_dependency_specifier: 'asyncio==3.4.3', ", end='')
     # print('to_install: ',end='')
     # if extras:
     #     print(f'".[{",".join(extras)}]",' '},')
