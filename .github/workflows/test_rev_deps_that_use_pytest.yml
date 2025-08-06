@@ -31,7 +31,7 @@ jobs:
       
     - name: Extract sdist
       run:
-        tar -xzf ./${{ matrix.rev-dep.package_name }}*.tar.gz
+        tar -xzf *.tar.gz
 
     - name: Install asyncio as specified (or v3.4.3)
       run: pip install ${{ matrix.rev-dep.asyncio_dependency_specifier }}
