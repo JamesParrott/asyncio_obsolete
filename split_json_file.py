@@ -12,13 +12,14 @@ for k in keys:
     if any('pytest' in dep for dep in deps):
         d_pytest[k] = info
         d.pop(k)
-pathlib.Path(f'{s}_pytest.json').write_text(json.dumps(d_pytest, indent='\t'))
 
+def write_files_of_255_entries(dict_, file_name):
+    keys_ = list(dict_)
+    N = len(keys_)
+    step = 255
+    for i in range(0,N,step):
+        d_i = {k: dict_[k] for k in keys_[i:min(N,i+step)]}
+        pathlib.Path(f'{file_name}_{i}.json').write_text(json.dumps(d_i, indent='\t'))
 
-keys = list(d)
-N = len(keys)
-step = 255
-for i in range(0,N,step):
-    d_i = {k: d[k].get('info',{}) for k in keys[i:min(N,i+step)]}
-    pathlib.Path(f'{s}_{i}.json').write_text(json.dumps(d_i, indent='\t'))
-
+write_files_of_255_entries(d_pytest, f'{s}_pytest')
+write_files_of_255_entries({k: v.get('info',{}) for k, v in d.items()}, s)
