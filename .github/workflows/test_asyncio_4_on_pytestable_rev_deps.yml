@@ -61,7 +61,7 @@ jobs:
 
 
     - name: Install asyncio as specified (or v3.4.3)
-      run: pip install ${{ matrix.rev-dep.asyncio_dependency_specifier }}
+      run: pip install asyncio==4.0.0
 
     - name: Install other deps
       run: pip install ${{ matrix.rev-dep.deps }}
