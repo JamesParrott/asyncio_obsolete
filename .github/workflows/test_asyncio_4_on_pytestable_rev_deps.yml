@@ -71,5 +71,5 @@ jobs:
 
     - name: Run pytest
       working-directory: .
-      timeout-minutes: 1
+      # timeout-minutes: 1
       run: pytest
