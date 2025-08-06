@@ -40,7 +40,7 @@ jobs:
       run: pip install ${{ matrix.rev-dep.deps }}
 
     - name: Install ${{ matrix.rev-deps.package_name }} from pypi
-      run: pip install matrix.rev-deps.package_name 
+      run: pip install ${{ matrix.rev-deps.package_name }}
 
     - name: Run pytest
       timeout-minutes: 1
