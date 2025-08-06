@@ -11,7 +11,7 @@ with open(file_,'rt') as f:
 for k, v in d.items():
     # extras = set()
     deps = []
-    asyncio_dep_spec = "asyncio.3.4.3"  # Test the last non no-op release by default
+    asyncio_dep_spec = "asyncio==3.4.3"  # Test the last non no-op release by default
     info_deps = v.get('requires_dist', [])
     for dep in info_deps:
 
@@ -30,7 +30,7 @@ for k, v in d.items():
         #     extras.add(m.group('extra_name').strip())
 
     print('          - {' f'package_name: {k}, ', end='')
-    print(f"asyncio_dependency_specifier: '{asyncio_dep_spec}', ", end='')
+    print(f"asyncio_dependency_specifier: 'asyncio==3.4.3', ", end='')
     # print('to_install: ',end='')
     # if extras:
     #     print(f'".[{",".join(extras)}]",' '},')
