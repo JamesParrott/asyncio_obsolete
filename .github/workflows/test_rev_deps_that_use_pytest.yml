@@ -27,7 +27,7 @@ jobs:
         python-version: "3.13"
 
     - name: Download sdist
-      run: uv pip download --no-binary=:all: --no-deps --dest . ${{ matrix.rev-dep.package_name }}
+      run: 'pip download --no-binary=:all: --no-deps --dest . ${{ matrix.rev-dep.package_name }}'
       
     - name: Extract sdist
       run:
