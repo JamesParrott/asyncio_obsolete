@@ -1,5 +1,5 @@
 
-name: Find reverse dependencies metadata from PyPi JSON API
+name: Run Pytest on reverse-dependencies with old asyncio version
 
 on:
   workflow_dispatch:
