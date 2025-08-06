@@ -30,8 +30,8 @@ jobs:
       run: 'pip download --no-binary=:all: --no-deps --dest . ${{ matrix.rev-dep.package_name }}'
       
     - name: Extract sdist
-      run:
-        tar -xzf *.tar.gz
+      run: tar -xzf *.tar.gz --strip-components=1 -C .
+
 
     - name: Install asyncio as specified (or v3.4.3)
       run: pip install ${{ matrix.rev-dep.asyncio_dependency_specifier }}
@@ -43,6 +43,6 @@ jobs:
       run: pip install ${{ matrix.rev-dep.package_name }}
 
     - name: Run pytest
+      working-directory: .
       timeout-minutes: 1
-      working-directory: ./${{ matrix.rev-dep.package_name }}
       run: pytest
